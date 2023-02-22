@@ -1,20 +1,29 @@
-from datetime import datetime
+"""aplicación principal (modelo)"""
+
+import os
 
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, Numeric, String, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, DateTime
 
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import func
 
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine('sqlite:///..//brokers.db', echo=True)
+PYTHON_ENV = os.getenv('PYTHON_ENV')
 
-class PersistentObject(object):
-    objectID = Column('object_id', Integer(), primary_key=True, nullable=False)
-    timestamp = Column('timestamp', DateTime(), default=datetime.now, nullable=False)
+if PYTHON_ENV == 'DEV':
+    engine = create_engine('sqlite:///data//mypythofolio_dev.db', echo=True)
+elif PYTHON_ENV == 'PROD':
+    engine = create_engine('sqlite:///data//mypythofolio.db')
+else: # TEST
+    engine = create_engine('sqlite:///:memory:')
+
+class PersistentObject:
+    """objeto persistente base"""
+    object_id = Column('object_id', Integer, primary_key=True, nullable=False)
+    timestamp = Column('timestamp', DateTime, server_default=func.now(), nullable=False)
 
 Base = declarative_base(cls=PersistentObject)
 
 Session = sessionmaker(bind=engine)
-
-# Base.metadata.create_all(bind=engine)

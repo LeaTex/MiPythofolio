@@ -1,0 +1,11 @@
+astroid==2.9.2
+colorama==0.4.4
+greenlet==1.1.2
+isort==5.10.1
+lazy-object-proxy==1.7.1
+mccabe==0.6.1
+platformdirs==2.4.1
+pylint==2.12.2
+SQLAlchemy==1.4.46
+toml==0.10.2
+wrapt==1.13.3
